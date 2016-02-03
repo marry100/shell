@@ -1,0 +1,15 @@
+#!/bin/bash
+i=0
+ran=1
+while (($i != $ran))
+do
+   read -p '请输入一个小于100的整数：' i;
+   ran=$(($RANDOM % 101))
+   if (($i < $ran))
+      then echo '你输入的数比随机数小：'$i'小于'$ran;
+   else if (($i > $ran))
+      then echo '你输入的数比随机数大：'$i'大于'$ran;
+   else echo '你输入的数和随机数相同：'$i'等于'$ran;
+   fi
+   fi
+done

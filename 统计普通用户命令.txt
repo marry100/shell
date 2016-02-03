@@ -1,0 +1,8 @@
+#!/bin/bash
+
+count=`awk -F ':' '$3>=500' /etc/passwd|wc -l `
+if (($count==0))
+    then echo '系统中没有普通用户！'
+else
+    echo '系统中有'$count'个普通用户！'
+fi

@@ -1,0 +1,8 @@
+#!/bin/bash
+for i in `seq 1 20`
+do
+#useradd user_$i
+pas="$RANDOM"
+#echo $pas | passwd --stdin user_$i
+echo "ÓÃ»§ user_"$i" ÃÜÂëÊÇ" $pas >> /tmp/user.txt
+done

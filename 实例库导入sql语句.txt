@@ -1,0 +1,75 @@
+select to_char(sysdate,'yyyymmdd')||q_psxh.nextval,t.fq_dm,t.fwlx,t.jylx,t.jzjg,t.cjhs,t.zlc,t.szlc,t.ywdt,t.jzmj,t.jyjg,t.jyrq,t.jcrq,t.syqmj,t.rjl,'26401810406',sysdate,t.xybz,null,t.sllx,null,t.cs_dm from v_slk t;
+
+insert into t_ps_slk_fcxx_temp value (
+select to_char(sysdate,'yyyymmdd')||q_psxh.nextval,t.fq_dm,t.fwlx,t.jylx,t.jzjg,t.cjhs,t.zlc,t.szlc,t.ywdt,t.jzmj,t.jyjg,to_date(t.jyrq,'yyyy-mm-dd'),to_date(t.jcrq||'-06-01','yyyy-mm-dd'),t.syqmj,t.rjl,t.lrry_dm,t.xgrq,t.xybz,null fcid,t.sllx,null xq_dm,t.cs_dm fwcx from v_slk t
+); 
+
+
+insert into t_ps_slk_fcxx value(
+select t.slkid,t.ssfq,t.fwlx,t.jylx,t.jzjg,t.fwcjhs,t.fwzlc,t.fwszlc,t.ywdt,t.jzmj,t.jyjg,t.fwjyrq,t.fwjcrq,t.tdsyqmj,t.fwrjv,t.lrry_dm,t.xgrq,t.xybz,t.fcid,t.sllx,t.xq_dm from t_ps_slk_fcxx_temp t
+);
+insert into t_ps_slk_fccsxx value(
+select t.slkid,'1','20110712100000129571',t.fwcx from t_ps_slk_fcxx_temp t
+);
+
+update t_ps_slk_fcxx t
+   set (t.xq_dm, t.fwlh) = (select kz.xq_dm,kz.fwlh
+                              from t_Dj_Xq_Kz kz--,t_ps_slk_fcxx t
+                             where t.ssfq = kz.sspsfq_dm
+                               and t.fwzlc = kz.fwzlc and rownum='1') where t.xq_dm is null; 
+
+
+delete from t_ps_slk_fcxx_temp t;
+delete from sjdrtable t;
+
+/* 360估价,小区导入 */
+insert into web_jc_xq value (select t.xq_dm,
+       t.xq_mc,
+       t.xq_dz,
+       '',
+       t.xqwymc,
+       '',
+       '',
+       '',
+       '',
+       t.xqrjl,
+       t.xqlhl,
+       '',
+       t.xq_sm,
+       zb.gjxl,
+       '',
+       '幼儿园：'||zb.jyss_yey||'，小学：'||zb.jyss_ptxx||'/'||zb.jyss_zdxx||'，中学：'||zb.jyss_ptzx||'/'||zb.jyss_zdzx,
+       zb.shss_yh,
+       zb.zwhj_ztgy,
+       zb.shss_sd||'/'||zb.shss_cs||'/'||zb.shss_gwzx,
+       zb.shss_cyss,
+       '',
+       t.gljg_dm,
+       ''
+  from electax.t_dj_xq t, electax.t_dj_xq_zb zb
+ where t.xq_dm = zb.xq_dm
+   and t.gljg_dm like '6401%'
+   and t.xq_dm not in (select t1.xqdm from web_jc_xq t1));
+   
+   /*360估价,栋楼导入*/
+   
+   insert into web_jc_dl value (
+select to_char(sysdate, 'yyyymmdd') || xh.nextval,
+       t.xq_dm,
+       t.fwlh,
+       t.fwzlc,
+       t.fwcjhs,
+       t.jzjg,
+       t.fwlx,
+       t.ywdt,
+       t.ljbz,
+       t.fwjcrq,
+       '',
+       t.bzxx,
+       xq.gljg_dm,
+       ''
+  from electax.t_dj_xq_kz t,electax.t_dj_xq xq
+  where t.xq_dm=xq.xq_dm
+  and xq.gljg_dm like '6401%'
+  and (t.xq_dm,t.fwlh) not in (select t1.xqdm,t1.dllh from web_jc_dl t1)
+);

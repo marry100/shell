@@ -1,0 +1,13 @@
+#!/bin/bash
+
+while : ;
+do
+   read -p '请输入一个数字：' i;
+   n=`echo $i |sed 's#[0-9]##g'`
+   if [ ! -z $n ]
+      then echo '你输入的不是有效数字：'$i;
+   else
+      echo '你输入的数字是：'$i;
+      exit 0;
+   fi
+done

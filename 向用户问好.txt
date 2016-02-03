@@ -1,0 +1,9 @@
+#!/bin/bash
+FILE="/etc/passwd"
+for l in `cat $FILE` ; do
+username=`echo $l | awk -F ':' '{print $1}'`
+userid=`echo $l | awk -F ':' '{print $3}'`
+echo "HELLO,$username your UID is $userid"
+done
+d=`wc -l $FILE`
+echo " There are $d users"
